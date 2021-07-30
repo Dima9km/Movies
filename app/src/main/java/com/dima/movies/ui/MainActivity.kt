@@ -3,6 +3,7 @@ package com.dima.movies.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModel.errorMessage.observe(this, {
-            //TODO
+            Toast.makeText(this, it, Toast.LENGTH_LONG ).show()
         })
         viewModel.getAllMovies()
     }
