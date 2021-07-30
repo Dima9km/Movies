@@ -20,6 +20,7 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srlRefresh"
+        android:layout_below="@+id/pbLinearProgress"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -35,16 +36,18 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ProgressBar
-        android:id="@+id/pbMovies"
-        android:layout_width="@dimen/dimens_28dp"
-        android:layout_height="@dimen/dimens_28dp"
-        android:layout_gravity="center"
+        android:id="@+id/pbRoundProgress"
+        android:layout_width="@dimen/width_28dp"
+        android:layout_height="@dimen/height_28dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:indeterminate="true"
         android:indeterminateTint="@color/blue" />
 
     <ProgressBar
-        android:id="@+id/pbContent"
+        android:id="@+id/pbLinearProgress"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_below="@+id/etSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
@@ -55,7 +58,8 @@
         android:id="@+id/llNotFound"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:orientation="vertical">
 
         <ImageView
@@ -68,10 +72,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="32dp"
+            android:padding="@dimen/padding_32dp"
             android:text="@string/not_found"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_16sp" />
+            android:textSize="@dimen/main_label_error" />
 
     </LinearLayout>
 
@@ -79,6 +83,8 @@
         android:id="@+id/llError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_gravity="center"
         android:orientation="vertical">
 
@@ -92,10 +98,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="32dp"
+            android:padding="@dimen/padding_32dp"
             android:text="@string/net_error"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_16sp" />
+            android:textSize="@dimen/main_label_error" />
 
     </LinearLayout>
 
@@ -105,6 +111,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/margin_16dp"
         android:backgroundTint="@color/blue"
         android:src="@drawable/ic_refresh_arrow"
         android:tint="@color/white" />

@@ -28,7 +28,7 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:textSize="22sp"
+                android:textSize="@dimen/item_title_text"
                 android:textStyle="bold"
                 android:visibility="visible"
                 tools:text="Movie title longest ever in two strings (and only two) " />
@@ -39,7 +39,7 @@
                 android:layout_height="130dp"
                 android:lineSpacingExtra="4dp"
                 android:paddingTop="@dimen/padding_8dp"
-                android:textSize="14sp"
+                android:textSize="@dimen/item_desc_text"
                 tools:text="Here will be description of movie and some spoilers for ... will be description of movie and some spoilers for " />
 
             <TextView
@@ -48,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/padding_8dp"
                 android:paddingTop="@dimen/padding_8dp"
+                android:textSize="@dimen/item_desc_text"
                 app:drawableStartCompat="@drawable/ic_calendar"
                 app:drawableEndCompat="@drawable/ic_heart"
                 tools:text="1 августа 2023" />
