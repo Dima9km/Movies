@@ -44,11 +44,12 @@
 
             <TextView
                 android:id="@+id/tvDate"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/padding_8dp"
                 android:paddingTop="@dimen/padding_8dp"
                 app:drawableStartCompat="@drawable/ic_calendar"
+                app:drawableEndCompat="@drawable/ic_heart"
                 tools:text="1 августа 2023" />
 
         </LinearLayout>
