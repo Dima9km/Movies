@@ -10,16 +10,23 @@ import retrofit2.http.Query
 interface RetrofitService {
 
     @GET("discover/movie?")
-    fun getAllMovies(): Call<List<Movie>>
+    fun getAllMovies(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String
+    ): Call<List<Movie>>
+
 
     @GET("search/movie?")
-    fun searchMovies(): Call<List<Movie>>
+    fun searchMovies(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String
+    ): Call<List<Movie>>
 
     companion object {
 
         var retrofitService: RetrofitService? = null
 
-        fun getInstance() : RetrofitService {
+        fun getInstance(): RetrofitService {
 
             if (retrofitService == null) {
                 val retrofit = Retrofit.Builder()
