@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,97 +18,94 @@
         android:paddingStart="@dimen/padding_12dp"
         android:paddingEnd="@dimen/padding_16dp" />
 
-    <FrameLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srlRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/srlRefresh"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMovies"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvMovies"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+        </androidx.recyclerview.widget.RecyclerView>
 
-            </androidx.recyclerview.widget.RecyclerView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <ProgressBar
+        android:id="@+id/pbMovies"
+        android:layout_width="@dimen/dimens_28dp"
+        android:layout_height="@dimen/dimens_28dp"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/blue" />
 
-        <ProgressBar
-            android:id="@+id/pbMovies"
-            android:layout_width="@dimen/dimens_28dp"
-            android:layout_height="@dimen/dimens_28dp"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/blue" />
+    <ProgressBar
+        android:id="@+id/pbContent"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:progressTint="@color/blue"
+        tools:progress="35" />
 
-        <ProgressBar
-            android:id="@+id/pbContent"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:progressTint="@color/blue"
-            tools:progress="35" />
-
-        <LinearLayout
-            android:id="@+id/llNotFound"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_big_search" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="32dp"
-                android:text="@string/not_found"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_16sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llError"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_alert" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="32dp"
-                android:text="@string/net_error"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_16sp" />
-
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llNotFound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:src="@drawable/ic_refresh" />
+            android:layout_gravity="center"
+            android:src="@drawable/ic_big_search" />
 
-    </FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="32dp"
+            android:text="@string/not_found"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_16sp" />
 
-</LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_alert" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="32dp"
+            android:text="@string/net_error"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_16sp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/blue"
+        android:src="@drawable/ic_refresh_arrow"
+        android:tint="@color/white" />
+</RelativeLayout>
