@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         initUI()
 
         viewModel =
-            ViewModelProvider(this, MyViewModelFactory(MainRepository(retrofitService))).get(
+            ViewModelProvider(this, MainViewModelFactory(MainRepository(retrofitService))).get(
                 MainViewModel::class.java
             )
         viewModel.moviesList.observe(this, {
