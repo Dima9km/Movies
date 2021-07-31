@@ -49,8 +49,8 @@
                 android:drawablePadding="@dimen/padding_8dp"
                 android:paddingTop="@dimen/padding_8dp"
                 android:textSize="@dimen/item_desc_text"
-                app:drawableStartCompat="@drawable/ic_calendar"
                 app:drawableEndCompat="@drawable/ic_heart"
+                app:drawableStartCompat="@drawable/ic_calendar"
                 tools:text="1 августа 2023" />
 
         </LinearLayout>

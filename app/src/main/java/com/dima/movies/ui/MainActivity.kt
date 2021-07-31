@@ -5,14 +5,12 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dima.movies.MainRepository
 import com.dima.movies.R
 import com.dima.movies.network.RetrofitService
-import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,12 +29,12 @@ class MainActivity : AppCompatActivity() {
             ViewModelProvider(this, MyViewModelFactory(MainRepository(retrofitService))).get(
                 MainViewModel::class.java
             )
-        viewModel.movieList.observe(this, {
-            adapter.setMovieList(it)
+        viewModel.moviesList.observe(this, {
+            adapter.setMoviesList(it)
         })
 
         viewModel.errorMessage.observe(this, {
-            Toast.makeText(this, it, Toast.LENGTH_LONG ).show()
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         })
         viewModel.getAllMovies()
     }

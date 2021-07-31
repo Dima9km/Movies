@@ -1,26 +1,34 @@
 package com.dima.movies.network
 
-import com.dima.movies.model.Movie
+import com.dima.movies.BuildConfig
+import com.dima.movies.model.AllMoviesResponse
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
+import com.ihsanbal.logging.Level
+import com.ihsanbal.logging.LoggingInterceptor
+import okhttp3.OkHttpClient
+import okhttp3.internal.platform.Platform
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import java.util.concurrent.TimeUnit
 
 interface RetrofitService {
 
-    @GET("discover/movie?")
+    @GET("discover/movie")
     fun getAllMovies(
         @Query("api_key") apiKey: String,
         @Query("language") language: String
-    ): Call<List<Movie>>
+    ): Call<AllMoviesResponse>
 
-
-    @GET("search/movie?")
+    @GET("search/movie")
     fun searchMovies(
         @Query("api_key") apiKey: String,
-        @Query("language") language: String
-    ): Call<List<Movie>>
+        @Query("language") language: String,
+        @Query("query") query: String
+    ): Call<AllMoviesResponse>
 
     companion object {
 
@@ -29,11 +37,30 @@ interface RetrofitService {
         fun getInstance(): RetrofitService {
 
             if (retrofitService == null) {
-                val retrofit = Retrofit.Builder()
-                    .baseUrl("https://api.themoviedb.org/3/")
-                    .addConverterFactory(GsonConverterFactory.create())
+                val gson = GsonBuilder()
+                    .setPrettyPrinting()
+                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
+
+                val okHttpInterceptorLogging = LoggingInterceptor.Builder()
+                    .loggable(BuildConfig.DEBUG)
+                    .setLevel(Level.BODY)
+                    .log(Platform.INFO)
+                    .tag("REST")
                     .build()
-                retrofitService = retrofit.create(RetrofitService::class.java)
+
+                val okHttpClient = OkHttpClient.Builder()
+                    .addInterceptor(okHttpInterceptorLogging)
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS)
+                    .callTimeout(60, TimeUnit.SECONDS)
+                    .build()
+
+                retrofitService = Retrofit.Builder()
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .baseUrl("https://api.themoviedb.org/3/")
+                    .client(okHttpClient)
+                    .build()
+                    .create(RetrofitService::class.java)
             }
             return retrofitService!!
         }

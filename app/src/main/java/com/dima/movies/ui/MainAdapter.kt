@@ -14,7 +14,7 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
     var movies = mutableListOf<Movie>()
 
-    fun setMovieList(movies: List<Movie>) {
+    fun setMoviesList(movies: List<Movie>) {
         this.movies = movies.toMutableList()
         notifyDataSetChanged()
     }
@@ -31,28 +31,27 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
     override fun getItemCount() = movies.size
 
-
     class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var title: TextView? = null
-        var image: ImageView? = null
-        var desc: TextView? = null
-        var releaseDate: TextView? = null
+        private var title: TextView? = null
+        private var image: ImageView? = null
+        private var desc: TextView? = null
+        private var releaseDate: TextView? = null
 
         init {
             title = itemView.findViewById(R.id.tvTitle)
             image = itemView.findViewById(R.id.ivImage)
-            title = itemView.findViewById(R.id.tvTitle)
-            title = itemView.findViewById(R.id.tvTitle)
+            desc = itemView.findViewById(R.id.tvDescription)
+            releaseDate = itemView.findViewById(R.id.tvDate)
 
         }
 
         fun bind(movie: Movie) {
             title?.setText(movie.title)
-            Picasso.with(itemView.getContext())
-                .load(movie.imageUrl)
-                .into(image)
-            desc?.setText(movie.desc)
+            desc?.setText(movie.overview)
             releaseDate?.setText(movie.releaseDate)
+            Picasso.with(itemView.context)
+                .load(movie.posterPath)
+                .into(image)
 
         }
     }
