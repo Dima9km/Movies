@@ -2,9 +2,9 @@ package com.dima.movies.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.dima.movies.viewmodel.repository.MainRepository
+import com.dima.movies.repository.MoviesRepository
 
-class MainViewModelFactory(private val repository: MainRepository) :
+class MainViewModelFactory(private val repository: MoviesRepository) :
     ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

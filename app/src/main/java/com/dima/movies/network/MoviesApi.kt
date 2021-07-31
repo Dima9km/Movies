@@ -15,7 +15,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
-interface RetrofitService {
+interface MoviesApi {
 
     @GET("discover/movie")
     fun getAllMovies(
@@ -31,16 +31,13 @@ interface RetrofitService {
     ): Call<AllMoviesResponse>
 
     companion object {
-
-        private var retrofitService: RetrofitService? = null
+        private var moviesApi: MoviesApi? = null
         private const val BASEURL = "https://api.themoviedb.org/3/"
         const val APIKEY = "6ccd72a2a8fc239b13f209408fc31c33"
         const val LANG = "ru"
 
-        fun getInstance(): RetrofitService {
-
-
-            if (retrofitService == null) {
+        fun getInstance(): MoviesApi {
+            if (moviesApi == null) {
                 val gson = GsonBuilder()
                     .setPrettyPrinting()
                     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
@@ -59,14 +56,14 @@ interface RetrofitService {
                     .callTimeout(60, TimeUnit.SECONDS)
                     .build()
 
-                retrofitService = Retrofit.Builder()
+                moviesApi = Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .baseUrl(BASEURL)
                     .client(okHttpClient)
                     .build()
-                    .create(RetrofitService::class.java)
+                    .create(MoviesApi::class.java)
             }
-            return retrofitService!!
+            return moviesApi!!
         }
     }
 }

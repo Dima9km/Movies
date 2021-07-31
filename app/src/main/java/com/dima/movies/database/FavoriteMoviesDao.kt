@@ -10,8 +10,8 @@ import com.dima.movies.model.Movie
 interface FavoriteMoviesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addFavorite(movie: Movie?)
+    fun add(movie: Movie)
 
     @Delete
-    fun deleteFavorite(movie: Movie?)
+    fun delete(movie: Movie)
 }

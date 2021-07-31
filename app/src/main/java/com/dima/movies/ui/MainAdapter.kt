@@ -13,10 +13,10 @@ import com.squareup.picasso.Picasso
 class MainAdapter : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
     var movies = mutableListOf<Movie>()
-
-    fun setMoviesList(movies: List<Movie>) {
-        this.movies = movies.toMutableList()
-    }
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder(
@@ -49,6 +49,7 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
             releaseDate?.text = movie.releaseDate
             Picasso.with(itemView.context)
                 .load(movie.posterPath)
+                .error(R.drawable.ic_no_image)
                 .into(image)
         }
     }
