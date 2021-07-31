@@ -5,5 +5,4 @@ data class AllMoviesResponse(
     val results: List<Movie>,
     val totalPages: Int,
     val totalResults: Long
-) {
-}
+)

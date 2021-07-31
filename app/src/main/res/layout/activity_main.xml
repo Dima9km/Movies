@@ -15,8 +15,11 @@
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="@dimen/padding_16dp"
         android:hint="@string/search_hint"
+        android:imeOptions="actionDone"
         android:paddingStart="@dimen/padding_12dp"
-        android:paddingEnd="@dimen/padding_16dp" />
+        android:paddingEnd="@dimen/padding_16dp"
+        android:singleLine="true"
+        android:inputType="text" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srlRefresh"

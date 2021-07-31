@@ -1,10 +1,12 @@
 package com.dima.movies.database
 
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import com.dima.movies.model.Movie
 
+@Dao
 interface FavoriteMoviesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -1,32 +1,23 @@
 package com.dima.movies.viewmodel.repository
 
 import com.dima.movies.model.AllMoviesResponse
-import com.dima.movies.model.Movie
 import com.dima.movies.network.RetrofitService
 import retrofit2.Call
 
-class MainRepository constructor(private val retrofitService: RetrofitService, ) {
-
-    constructor (retrofitService: RetrofitService, _userQuery: String) : this(retrofitService) {
-        userQuery = userQuery
-    }
-
-    var userQuery: String = ""
+class MainRepository(private val retrofitService: RetrofitService) {
 
     fun getAllMovies(): Call<AllMoviesResponse> = retrofitService.getAllMovies(
-        "6ccd72a2a8fc239b13f209408fc31c33", "ru"
+        RetrofitService.APIKEY, RetrofitService.LANG
     )
 
-    fun searchMovies() = retrofitService.searchMovies(
-        "6ccd72a2a8fc239b13f209408fc31c33", "ru", userQuery
+    fun searchMovies(userQuery: String): Call<AllMoviesResponse> = retrofitService.searchMovies(
+        RetrofitService.APIKEY, RetrofitService.LANG, userQuery
     )
 
     fun saveFavorites() {
-
     }
 
     fun loadFavorites() {
-
     }
 
 }

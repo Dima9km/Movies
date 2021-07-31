@@ -16,7 +16,6 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
     fun setMoviesList(movies: List<Movie>) {
         this.movies = movies.toMutableList()
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
@@ -42,17 +41,15 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
             image = itemView.findViewById(R.id.ivImage)
             desc = itemView.findViewById(R.id.tvDescription)
             releaseDate = itemView.findViewById(R.id.tvDate)
-
         }
 
         fun bind(movie: Movie) {
-            title?.setText(movie.title)
-            desc?.setText(movie.overview)
-            releaseDate?.setText(movie.releaseDate)
+            title?.text = movie.title
+            desc?.text = movie.overview
+            releaseDate?.text = movie.releaseDate
             Picasso.with(itemView.context)
                 .load(movie.posterPath)
                 .into(image)
-
         }
     }
 }

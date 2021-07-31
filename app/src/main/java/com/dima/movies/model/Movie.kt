@@ -1,7 +1,9 @@
 package com.dima.movies.model
 
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity
 data class Movie(
     @PrimaryKey
     val title: String,
@@ -9,5 +11,4 @@ data class Movie(
     val overview: String,
     val releaseDate: String,
     val isFavorite: Boolean
-) {
-}
+)

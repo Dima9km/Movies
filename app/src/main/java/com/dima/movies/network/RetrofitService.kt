@@ -32,9 +32,13 @@ interface RetrofitService {
 
     companion object {
 
-        var retrofitService: RetrofitService? = null
+        private var retrofitService: RetrofitService? = null
+        private const val BASEURL = "https://api.themoviedb.org/3/"
+        const val APIKEY = "6ccd72a2a8fc239b13f209408fc31c33"
+        const val LANG = "ru"
 
         fun getInstance(): RetrofitService {
+
 
             if (retrofitService == null) {
                 val gson = GsonBuilder()
@@ -57,7 +61,7 @@ interface RetrofitService {
 
                 retrofitService = Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(gson))
-                    .baseUrl("https://api.themoviedb.org/3/")
+                    .baseUrl(BASEURL)
                     .client(okHttpClient)
                     .build()
                     .create(RetrofitService::class.java)

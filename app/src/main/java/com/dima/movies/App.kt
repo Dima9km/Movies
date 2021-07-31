@@ -1,7 +1,7 @@
 package com.dima.movies
 
 import android.app.Application
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import com.dima.movies.database.FavoriteMoviesDatabase
 
 class App : Application() {
@@ -10,7 +10,8 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-            favoriteMoviesDatabase = Room.databaseBuilder(this, FavoriteMoviesDatabase::class.java, "favorites")
+        favoriteMoviesDatabase =
+            Room.databaseBuilder(this, FavoriteMoviesDatabase::class.java, "favorites")
                 .allowMainThreadQueries()
                 .build()
     }

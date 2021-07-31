@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel constructor(private val repository: MainRepository) : ViewModel() {
+class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
     val moviesList = MutableLiveData<List<Movie>>()
     val errorMessage = MutableLiveData<String>()
@@ -29,4 +29,10 @@ class MainViewModel constructor(private val repository: MainRepository) : ViewMo
             }
         })
     }
+
+    fun searchMovies(userQuery: String) {
+        repository.searchMovies(userQuery)
+    }
+
+
 }
