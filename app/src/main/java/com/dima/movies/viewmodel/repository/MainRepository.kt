@@ -1,4 +1,4 @@
-package com.dima.movies
+package com.dima.movies.viewmodel.repository
 
 import com.dima.movies.model.AllMoviesResponse
 import com.dima.movies.model.Movie

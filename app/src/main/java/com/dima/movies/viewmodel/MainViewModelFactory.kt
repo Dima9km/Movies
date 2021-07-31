@@ -2,7 +2,8 @@ package com.dima.movies.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.dima.movies.MainRepository
+import com.dima.movies.viewmodel.repository.MainRepository
+import com.dima.movies.viewmodel.MainViewModel
 
 class MyViewModelFactory constructor(private val repository: MainRepository) :
     ViewModelProvider.Factory {

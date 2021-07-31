@@ -1,10 +1,10 @@
-package com.dima.movies.ui
+package com.dima.movies.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dima.movies.MainRepository
 import com.dima.movies.model.AllMoviesResponse
 import com.dima.movies.model.Movie
+import com.dima.movies.viewmodel.repository.MainRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -8,9 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dima.movies.MainRepository
+import com.dima.movies.viewmodel.repository.MainRepository
 import com.dima.movies.R
 import com.dima.movies.network.RetrofitService
+import com.dima.movies.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
