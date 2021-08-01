@@ -1,8 +1,6 @@
 package com.dima.movies.ui
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -13,26 +11,32 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dima.movies.R
+import com.dima.movies.database.MoviesDb
+import com.dima.movies.model.Movie
 import com.dima.movies.network.MoviesApi
+import com.dima.movies.repository.MoviesRepository
 import com.dima.movies.viewmodel.MainViewModel
 import com.dima.movies.viewmodel.MainViewModelFactory
-import com.dima.movies.repository.MoviesRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnFavoriteClickedListener {
 
     private lateinit var etSearch: EditText
 
     private val viewModel: MainViewModel by lazy {
-        val retrofitService = MoviesApi.getInstance()
+        val moviesApi = MoviesApi.getInstance()
+        val database = MoviesDb.getInstance(this)
 
-        ViewModelProvider(this, MainViewModelFactory(MoviesRepository(retrofitService))).get(
+        ViewModelProvider(
+            this,
+            MainViewModelFactory(MoviesRepository(moviesApi, database))
+        ).get(
             MainViewModel::class.java
         )
     }
 
-    private val adapter = MainAdapter()
+    private val adapter = MainAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,17 +66,19 @@ class MainActivity : AppCompatActivity() {
 
         val errorAlert = findViewById<LinearLayout>(R.id.llError)
         val notFoundAlert = findViewById<LinearLayout>(R.id.llNotFound)
-        val pbRoundProgress = findViewById<ProgressBar>(R.id.pbRoundProgress)
-        val pbLinearProgress = findViewById<ProgressBar>(R.id.pbLinearProgress)
-        val fabRefresh = findViewById<FloatingActionButton>(R.id.fabRefresh)
+        val roundProgress = findViewById<ProgressBar>(R.id.pbRoundProgress)
+        val linearProgress = findViewById<ProgressBar>(R.id.pbLinearProgress)
+        val refresh = findViewById<FloatingActionButton>(R.id.fabRefresh)
 
         etSearch = findViewById(R.id.etSearch)
-        etSearch.doAfterTextChanged { text -> viewModel.searchMovies(text.toString())  }
+        etSearch.doAfterTextChanged { text -> viewModel.searchMovies(text.toString()) }
 
         val srlRefresh = findViewById<SwipeRefreshLayout>(R.id.srlRefresh)
-        srlRefresh.setOnRefreshListener {
-            viewModel.getAllMovies()
-        }
+        srlRefresh.setOnRefreshListener { viewModel.getAllMovies() }
+    }
+
+    override fun clickedFavorite(movie: Movie) {
+        viewModel.organizeFavorite(movie)
     }
 
 }

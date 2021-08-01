@@ -37,12 +37,32 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
                 call: Call<AllMoviesResponse>,
                 response: Response<AllMoviesResponse>
             ) {
-                moviesList.postValue(response.body()?.results)
+                moviesList.postValue(formatMovies(response.body()?.results))
             }
 
             override fun onFailure(call: Call<AllMoviesResponse>, t: Throwable) {
                 errorMessage.postValue(t.message)
             }
         })
+    }
+
+    fun organizeFavorite(movie: Movie) {
+        if (!movie.isFavorite) {
+            repository.deleteMovies(movie)
+        } else {
+            repository.saveMovies(movie)
+        }
+    }
+
+    private fun formatMovies(movies: List<Movie>?): List<Movie>? {
+        if (movies != null) {
+            for (movie in movies) {
+                val id: Long = repository.getMovieById(movie.id).id
+                if (movie.id == id) {
+                    movie.isFavorite = true
+                }
+            }
+        }
+        return movies
     }
 }
