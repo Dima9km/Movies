@@ -13,7 +13,7 @@ import com.dima.movies.database.MoviesDb
 import com.dima.movies.model.Movie
 import com.dima.movies.network.MoviesApi
 import com.dima.movies.repository.MoviesRepository
-import com.dima.movies.ui.listener.OnFavoriteClickListener
+import com.dima.movies.ui.listener.OnClickFavoriteListener
 import com.dima.movies.viewmodel.MainViewModel
 import com.dima.movies.viewmodel.MainViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private val adapter = MainAdapter(onFavoriteClickListener = object : OnFavoriteClickListener {
+    private val adapter = MainAdapter(onClickFavoriteListener = object : OnClickFavoriteListener {
         override fun onClickFavorite(movie: Movie) {
             viewModel.updateMovie(movie)
         }

@@ -28,7 +28,9 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
                 call: Call<AllMoviesResponse>,
                 response: Response<AllMoviesResponse>
             ) {
-                moviesList.postValue(response.body()?.results)
+                if (response.body() != null) {
+                    moviesList.postValue(formatMovies(response.body()!!.results))
+                }
                 if (response.body()?.results?.size == 0) {
                     emptyResponse.postValue(true)
                 } else {
@@ -55,8 +57,9 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
                 }
                 if (response.body()?.results?.isEmpty() == true) {
                     emptyResponse.postValue(true)
-                    emptyResponseText.postValue(String
-                        .format("По вашему запросу «%s» ничего не найдено", userQuery))
+                    emptyResponseText.postValue(
+                        String.format("По вашему запросу «%s» ничего не найдено", userQuery)
+                    )
                 } else {
                     emptyResponse.postValue(false)
                 }
@@ -77,8 +80,9 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
     }
 
     private fun formatMovies(movies: List<Movie>): List<Movie> {
+        val moviesDb = repository.getMoviesFromDB()
         movies.forEach { movie ->
-            movie.isFavorite = movie.id == repository.getMovieById(movie.id)?.id
+            movie.isFavorite = moviesDb.any { movieDb -> movieDb.id == movie.id }
         }
         return movies
     }

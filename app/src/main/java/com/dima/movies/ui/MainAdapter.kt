@@ -9,10 +9,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.dima.movies.R
 import com.dima.movies.model.Movie
-import com.dima.movies.ui.listener.OnFavoriteClickListener
+import com.dima.movies.ui.listener.OnClickFavoriteListener
 import com.squareup.picasso.Picasso
 
-class MainAdapter(val onFavoriteClickListener: OnFavoriteClickListener) :
+class MainAdapter(val onClickFavoriteListener: OnClickFavoriteListener) :
     RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
     var movies = mutableListOf<Movie>()
@@ -24,7 +24,7 @@ class MainAdapter(val onFavoriteClickListener: OnFavoriteClickListener) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false),
-            onFavoriteClickListener
+            onClickFavoriteListener
         )
     }
 
@@ -34,7 +34,7 @@ class MainAdapter(val onFavoriteClickListener: OnFavoriteClickListener) :
 
     override fun getItemCount() = movies.size
 
-    class MainViewHolder(itemView: View, private val onFavoriteClickListener: OnFavoriteClickListener) :
+    class MainViewHolder(itemView: View, private val onClickFavoriteListener: OnClickFavoriteListener) :
         RecyclerView.ViewHolder(itemView) {
         private var title: TextView? = null
         private var image: ImageView? = null
@@ -56,21 +56,27 @@ class MainAdapter(val onFavoriteClickListener: OnFavoriteClickListener) :
             desc?.text = movie.overview
             releaseDate?.text = movie.releaseDate
             Picasso.with(itemView.context)
-                .load(movie.posterPath)
+                .load("https://image.tmdb.org/t/p/w500${movie.posterPath}")
                 .error(R.drawable.ic_no_image)
                 .into(image)
+
+            if (movie.isFavorite) {
+                favorite!!.setImageResource(R.drawable.ic_heart_fill)
+            } else  {
+                favorite!!.setImageResource(R.drawable.ic_heart)
+            }
 
             favorite?.setOnClickListener {
                 if (!movie.isFavorite) {
                     movie.isFavorite = true
                     favorite!!.setImageResource(R.drawable.ic_heart_fill)
                     showToast("Добавлено в избранное")
-                    onFavoriteClickListener.onClickFavorite(movie)
+                    onClickFavoriteListener.onClickFavorite(movie)
                 } else {
                     movie.isFavorite = false
                     favorite!!.setImageResource(R.drawable.ic_heart)
                     showToast("Удалено из избранного")
-                    onFavoriteClickListener.onClickFavorite(movie)
+                    onClickFavoriteListener.onClickFavorite(movie)
                 }
             }
         }
