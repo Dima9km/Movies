@@ -9,9 +9,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.dima.movies.R
 import com.dima.movies.model.Movie
+import com.dima.movies.ui.listener.OnFavoriteClickListener
 import com.squareup.picasso.Picasso
 
-class MainAdapter(val onFavoriteClickedListener: OnFavoriteClickedListener) :
+class MainAdapter(val onFavoriteClickListener: OnFavoriteClickListener) :
     RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
     var movies = mutableListOf<Movie>()
@@ -23,7 +24,7 @@ class MainAdapter(val onFavoriteClickedListener: OnFavoriteClickedListener) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false),
-            onFavoriteClickedListener
+            onFavoriteClickListener
         )
     }
 
@@ -33,7 +34,7 @@ class MainAdapter(val onFavoriteClickedListener: OnFavoriteClickedListener) :
 
     override fun getItemCount() = movies.size
 
-    class MainViewHolder(itemView: View, val onFavoriteClickedListener: OnFavoriteClickedListener) :
+    class MainViewHolder(itemView: View, private val onFavoriteClickListener: OnFavoriteClickListener) :
         RecyclerView.ViewHolder(itemView) {
         private var title: TextView? = null
         private var image: ImageView? = null
@@ -64,17 +65,17 @@ class MainAdapter(val onFavoriteClickedListener: OnFavoriteClickedListener) :
                     movie.isFavorite = true
                     favorite!!.setImageResource(R.drawable.ic_heart_fill)
                     showToast("Добавлено в избранное")
-                    onFavoriteClickedListener.clickedFavorite(movie)
+                    onFavoriteClickListener.onClickFavorite(movie)
                 } else {
                     movie.isFavorite = false
                     favorite!!.setImageResource(R.drawable.ic_heart)
                     showToast("Удалено из избранного")
-                    onFavoriteClickedListener.clickedFavorite(movie)
+                    onFavoriteClickListener.onClickFavorite(movie)
                 }
             }
         }
 
-        fun showToast(text: String) {
+        private fun showToast(text: String) {
             Toast.makeText(itemView.context, text, Toast.LENGTH_LONG).show()
         }
     }

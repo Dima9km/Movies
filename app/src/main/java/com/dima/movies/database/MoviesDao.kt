@@ -16,6 +16,6 @@ interface MoviesDao {
     fun getAll(): List<Movie>
 
     @Query("SELECT * FROM movie WHERE id = :id LIMIT 1")
-    fun getMovieById(id: Long): Movie
+    fun getMovieById(id: Long): Movie?
 
 }

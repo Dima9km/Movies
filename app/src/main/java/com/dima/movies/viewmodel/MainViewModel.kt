@@ -13,19 +13,32 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
 
     val moviesList = MutableLiveData<List<Movie>>()
     val errorMessage = MutableLiveData<String>()
+    val emptyResponse = MutableLiveData<Boolean>()
+    val emptyResponseText = MutableLiveData<String>()
+
+    init {
+        emptyResponse.postValue(false)
+    }
 
     fun getAllMovies() {
         val response = repository.getAllMovies()
+
         response.enqueue(object : Callback<AllMoviesResponse> {
             override fun onResponse(
                 call: Call<AllMoviesResponse>,
                 response: Response<AllMoviesResponse>
             ) {
                 moviesList.postValue(response.body()?.results)
+                if (response.body()?.results?.size == 0) {
+                    emptyResponse.postValue(true)
+                } else {
+                    emptyResponse.postValue(false)
+                }
             }
 
             override fun onFailure(call: Call<AllMoviesResponse>, t: Throwable) {
                 errorMessage.postValue(t.message)
+
             }
         })
     }
@@ -37,7 +50,16 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
                 call: Call<AllMoviesResponse>,
                 response: Response<AllMoviesResponse>
             ) {
-                moviesList.postValue(formatMovies(response.body()?.results))
+                if (response.body() != null) {
+                    moviesList.postValue(formatMovies(response.body()!!.results))
+                }
+                if (response.body()?.results?.isEmpty() == true) {
+                    emptyResponse.postValue(true)
+                    emptyResponseText.postValue(String
+                        .format("По вашему запросу «%s» ничего не найдено", userQuery))
+                } else {
+                    emptyResponse.postValue(false)
+                }
             }
 
             override fun onFailure(call: Call<AllMoviesResponse>, t: Throwable) {
@@ -46,22 +68,17 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
         })
     }
 
-    fun organizeFavorite(movie: Movie) {
+    fun updateMovie(movie: Movie) {
         if (!movie.isFavorite) {
-            repository.deleteMovies(movie)
+            repository.deleteMovie(movie)
         } else {
-            repository.saveMovies(movie)
+            repository.saveMovie(movie)
         }
     }
 
-    private fun formatMovies(movies: List<Movie>?): List<Movie>? {
-        if (movies != null) {
-            for (movie in movies) {
-                val id: Long = repository.getMovieById(movie.id).id
-                if (movie.id == id) {
-                    movie.isFavorite = true
-                }
-            }
+    private fun formatMovies(movies: List<Movie>): List<Movie> {
+        movies.forEach { movie ->
+            movie.isFavorite = movie.id == repository.getMovieById(movie.id)?.id
         }
         return movies
     }

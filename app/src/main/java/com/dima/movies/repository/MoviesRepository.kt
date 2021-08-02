@@ -24,11 +24,11 @@ class MoviesRepository(
             query = userQuery
     )
 
-    fun saveMovies(movie: Movie) {
+    fun saveMovie(movie: Movie) {
         moviesDb.favoriteMoviesDao().add(movie)
     }
 
-    fun deleteMovies(movie: Movie) {
+    fun deleteMovie(movie: Movie) {
         moviesDb.favoriteMoviesDao().delete(movie)
     }
 
@@ -36,7 +36,7 @@ class MoviesRepository(
         return moviesDb.favoriteMoviesDao().getAll()
     }
 
-    fun getMovieById(id: Long): Movie {
+    fun getMovieById(id: Long): Movie? {
         return moviesDb.favoriteMoviesDao().getMovieById(id)
     }
 

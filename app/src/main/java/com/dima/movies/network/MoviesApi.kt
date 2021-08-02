@@ -17,13 +17,13 @@ import java.util.concurrent.TimeUnit
 
 interface MoviesApi {
 
-    @GET("discover/movie")
+    @GET("3/discover/movie")
     fun getAllMovies(
         @Query("api_key") apiKey: String,
         @Query("language") language: String
     ): Call<AllMoviesResponse>
 
-    @GET("search/movie")
+    @GET("3/search/movie")
     fun searchMovies(
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
@@ -32,7 +32,7 @@ interface MoviesApi {
 
     companion object {
         private var moviesApi: MoviesApi? = null
-        private const val BASEURL = "https://api.themoviedb.org/3/"
+        private const val BASEURL = "https://api.themoviedb.org/"
         const val APIKEY = "6ccd72a2a8fc239b13f209408fc31c33"
         const val LANG = "ru"
 
