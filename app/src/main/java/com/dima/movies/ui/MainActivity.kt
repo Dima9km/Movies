@@ -27,6 +27,9 @@ class MainActivity : AppCompatActivity() {
     private var pbRoundProgress: ProgressBar? = null
     private var pbLinearProgress: ProgressBar? = null
     private var fabRefresh: FloatingActionButton? = null
+    private var srlRefresh: SwipeRefreshLayout? = null
+    private var rvMovies: RecyclerView? = null
+
 
     private val viewModel: MainViewModel by lazy {
         val moviesApi = MoviesApi.getInstance()
@@ -64,43 +67,56 @@ class MainActivity : AppCompatActivity() {
             when (event) {
                 is MainViewModel.MainEvent.MoviesList ->
                     adapter.movies = event.movies.toMutableList()
+
                 is MainViewModel.MainEvent.ErrorMessage ->
                     Toast.makeText(this, event.text, Toast.LENGTH_LONG).show()
+
                 is MainViewModel.MainEvent.EmptyResponse ->
                     if (event.emptyResponse) {
                         llNotFound?.visibility = View.VISIBLE
                     } else {
                         llNotFound?.visibility = View.GONE
                     }
+
                 is MainViewModel.MainEvent.EmptyResponseText ->
                     tvNotFound?.text = event.emptyResponseText
+
                 is MainViewModel.MainEvent.ErrorResponse ->
                     if (event.errorResponse) {
                         llError?.visibility = View.VISIBLE
+                        fabRefresh?.visibility = View.VISIBLE
+                        fabRefresh?.setOnClickListener{
+                            viewModel.getAllMovies()
+                            etSearch?.text = null
+                        }
+                        rvMovies?.visibility = View.GONE
                     } else {
                         llError?.visibility = View.GONE
+                        fabRefresh?.visibility = View.GONE
+                        rvMovies?.visibility = View.VISIBLE
                     }
+
                 is MainViewModel.MainEvent.RoundProgressShown ->
-                    if (event.roundProgressShown) {
+                    if (event.isShown) {
                         pbRoundProgress?.visibility = View.VISIBLE
                     } else {
                         pbRoundProgress?.visibility = View.GONE
                     }
+
                 is MainViewModel.MainEvent.LinearProgressShown ->
                     if (event.linearProgressShown) {
                         pbLinearProgress?.visibility = View.VISIBLE
                     } else {
                         pbLinearProgress?.visibility = View.GONE
                     }
-                //TODO
+
+                is MainViewModel.MainEvent.RefreshEnded ->
+                    srlRefresh?.isRefreshing = false
             }
         })
     }
 
     private fun initUI() {
-        val recyclerView = findViewById<RecyclerView>(R.id.rvMovies)
-        recyclerView.adapter = adapter
-
         llNotFound = findViewById(R.id.llNotFound)
         tvNotFound = findViewById(R.id.tvNotFound)
         llError = findViewById(R.id.llError)
@@ -108,12 +124,20 @@ class MainActivity : AppCompatActivity() {
         pbLinearProgress = findViewById(R.id.pbLinearProgress)
         fabRefresh = findViewById(R.id.fabRefresh)
 
+        rvMovies = findViewById(R.id.rvMovies)
+        rvMovies?.requestFocus()
+        rvMovies?.adapter = adapter
+
         etSearch = findViewById(R.id.etSearch)
         etSearch?.doAfterTextChanged { text ->
             viewModel.searchMovies(userQuery = text?.toString() ?: "")
         }
 
-        val srlRefresh = findViewById<SwipeRefreshLayout>(R.id.srlRefresh)
-        srlRefresh.setOnRefreshListener { viewModel.getAllMovies() }
+        srlRefresh = findViewById(R.id.srlRefresh)
+        srlRefresh?.setOnRefreshListener {
+            viewModel.getAllMovies()
+            etSearch?.text = null
+            srlRefresh?.isRefreshing = false
+        }
     }
 }

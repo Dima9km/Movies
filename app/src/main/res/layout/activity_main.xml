@@ -31,6 +31,7 @@
             android:id="@+id/rvMovies"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusableInTouchMode="true"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
@@ -38,26 +39,6 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <ProgressBar
-        android:id="@+id/pbRoundProgress"
-        android:layout_width="@dimen/width_28dp"
-        android:layout_height="@dimen/height_28dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:indeterminate="true"
-        android:indeterminateTint="@color/blue"
-        android:visibility="gone" />
-
-    <ProgressBar
-        android:id="@+id/pbLinearProgress"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etSearch"
-        android:layout_gravity="top"
-        android:progressTint="@color/blue"
-        android:visibility="gone"
-        tools:progress="35" />
 
     <LinearLayout
         android:id="@+id/llNotFound"
@@ -106,7 +87,7 @@
             android:id="@+id/tvError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:padding="@dimen/padding_32dp"
             android:text="@string/net_error"
             android:textColor="@color/white"
@@ -125,4 +106,26 @@
         android:src="@drawable/ic_refresh_arrow"
         android:tint="@color/white"
         android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/pbRoundProgress"
+        android:layout_width="@dimen/width_28dp"
+        android:layout_height="@dimen/height_28dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/blue"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/pbLinearProgress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etSearch"
+        android:layout_gravity="top"
+        android:progressTint="@color/blue"
+        android:visibility="gone"
+        tools:progress="35" />
+
 </RelativeLayout>
