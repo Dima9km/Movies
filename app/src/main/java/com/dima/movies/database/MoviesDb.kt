@@ -10,7 +10,6 @@ import com.dima.movies.model.Movie
 abstract class MoviesDb : RoomDatabase() {
     abstract fun favoriteMoviesDao(): MoviesDao
 
-
     companion object {
         fun getInstance(context: Context): MoviesDb {
             return Room.databaseBuilder(context, MoviesDb::class.java, "favorites")

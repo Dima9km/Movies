@@ -51,9 +51,9 @@ interface MoviesApi {
 
                 val okHttpClient = OkHttpClient.Builder()
                     .addInterceptor(okHttpInterceptorLogging)
-                    .readTimeout(60, TimeUnit.SECONDS)
-                    .writeTimeout(60, TimeUnit.SECONDS)
-                    .callTimeout(60, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(10, TimeUnit.SECONDS)
+                    .callTimeout(10, TimeUnit.SECONDS)
                     .build()
 
                 moviesApi = Retrofit.Builder()

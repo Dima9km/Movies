@@ -35,9 +35,4 @@ class MoviesRepository(
     fun getMoviesFromDB(): List<Movie> {
         return moviesDb.favoriteMoviesDao().getAll()
     }
-
-    fun getMovieById(id: Long): Movie? {
-        return moviesDb.favoriteMoviesDao().getMovieById(id)
-    }
-
 }

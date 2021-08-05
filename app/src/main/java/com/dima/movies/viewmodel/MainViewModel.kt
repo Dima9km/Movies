@@ -1,5 +1,6 @@
 package com.dima.movies.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dima.movies.model.AllMoviesResponse
@@ -11,64 +12,73 @@ import retrofit2.Response
 
 class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
 
-    val moviesList = MutableLiveData<List<Movie>>()
-    val errorMessage = MutableLiveData<String>()
-    val emptyResponse = MutableLiveData<Boolean>()
-    val emptyResponseText = MutableLiveData<String>()
-
-    init {
-        emptyResponse.postValue(false)
-    }
+    private val _events = MutableLiveData<MainEvent>()
+    val events: LiveData<MainEvent> get() = _events
 
     fun getAllMovies() {
         val response = repository.getAllMovies()
-
+        _events.value = MainEvent.ErrorResponse(false)
+        _events.value = MainEvent.RoundProgressShown(true)
         response.enqueue(object : Callback<AllMoviesResponse> {
             override fun onResponse(
                 call: Call<AllMoviesResponse>,
                 response: Response<AllMoviesResponse>
             ) {
+                _events.value = MainEvent.ErrorResponse(false)
                 if (response.body() != null) {
-                    moviesList.postValue(formatMovies(response.body()!!.results))
+                    _events.value = MainEvent.MoviesList(formatMovies(response.body()!!.results))
                 }
                 if (response.body()?.results?.size == 0) {
-                    emptyResponse.postValue(true)
+                    _events.value = MainEvent.EmptyResponse(true)
                 } else {
-                    emptyResponse.postValue(false)
+                    _events.value = MainEvent.EmptyResponse(false)
                 }
             }
 
             override fun onFailure(call: Call<AllMoviesResponse>, t: Throwable) {
-                errorMessage.postValue(t.message)
-
+                _events.value = MainEvent.EmptyResponse(false)
+                _events.value = MainEvent.ErrorMessage(t.message)
+                _events.value = MainEvent.ErrorResponse(true)
             }
+
         })
+        _events.value = MainEvent.RoundProgressShown(false)
     }
 
     fun searchMovies(userQuery: String) {
         val response = repository.searchMovies(userQuery)
+        _events.value = MainEvent.RoundProgressShown(true)
+
         response.enqueue(object : Callback<AllMoviesResponse> {
             override fun onResponse(
                 call: Call<AllMoviesResponse>,
                 response: Response<AllMoviesResponse>
             ) {
+                _events.value = MainEvent.ErrorResponse(false)
                 if (response.body() != null) {
-                    moviesList.postValue(formatMovies(response.body()!!.results))
+                    _events.value = MainEvent.MoviesList(formatMovies(response.body()!!.results))
+
                 }
                 if (response.body()?.results?.isEmpty() == true) {
-                    emptyResponse.postValue(true)
-                    emptyResponseText.postValue(
-                        String.format("По вашему запросу «%s» ничего не найдено", userQuery)
+                    _events.value = MainEvent.EmptyResponse(true)
+                    _events.value = MainEvent.EmptyResponseText(
+                        String.format(
+                            "По вашему запросу «%s»\nничего не найдено",
+                            userQuery
+                        )
                     )
                 } else {
-                    emptyResponse.postValue(false)
+                    _events.value = MainEvent.EmptyResponse(false)
                 }
             }
 
             override fun onFailure(call: Call<AllMoviesResponse>, t: Throwable) {
-                errorMessage.postValue(t.message)
+                _events.value = MainEvent.EmptyResponse(false)
+                _events.value = MainEvent.ErrorMessage(t.message)
+                _events.value = MainEvent.ErrorResponse(true)
             }
         })
+        _events.value = MainEvent.RoundProgressShown(false)
     }
 
     fun updateMovie(movie: Movie) {
@@ -85,5 +95,15 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
             movie.isFavorite = moviesDb.any { movieDb -> movieDb.id == movie.id }
         }
         return movies
+    }
+
+    sealed class MainEvent {
+        data class MoviesList(val movies: List<Movie>) : MainEvent()
+        data class ErrorMessage(val text: String?) : MainEvent()
+        data class EmptyResponse(val emptyResponse: Boolean) : MainEvent()
+        data class EmptyResponseText(val emptyResponseText: String) : MainEvent()
+        data class ErrorResponse(val errorResponse: Boolean) : MainEvent()
+        data class RoundProgressShown(val roundProgressShown: Boolean) : MainEvent()
+        data class LinearProgressShown(val linearProgressShown: Boolean) : MainEvent()
     }
 }

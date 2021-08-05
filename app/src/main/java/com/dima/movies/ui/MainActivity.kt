@@ -18,7 +18,6 @@ import com.dima.movies.viewmodel.MainViewModel
 import com.dima.movies.viewmodel.MainViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-
 class MainActivity : AppCompatActivity() {
 
     private var etSearch: EditText? = null
@@ -60,24 +59,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initLiveData() {
-        viewModel.moviesList.observe(this, { movies ->
-            adapter.movies = movies.toMutableList()
-        })
 
-        viewModel.errorMessage.observe(this, { error ->
-            Toast.makeText(this, error, Toast.LENGTH_LONG).show()
-        })
-
-        viewModel.emptyResponse.observe(this, { isEmpty ->
-            if (isEmpty == true) {
-                llNotFound?.visibility = View.VISIBLE
-            } else {
-                llNotFound?.visibility = View.GONE
+        viewModel.events.observe(this, { event ->
+            when (event) {
+                is MainViewModel.MainEvent.MoviesList ->
+                    adapter.movies = event.movies.toMutableList()
+                is MainViewModel.MainEvent.ErrorMessage ->
+                    Toast.makeText(this, event.text, Toast.LENGTH_LONG).show()
+                is MainViewModel.MainEvent.EmptyResponse ->
+                    if (event.emptyResponse) {
+                        llNotFound?.visibility = View.VISIBLE
+                    } else {
+                        llNotFound?.visibility = View.GONE
+                    }
+                is MainViewModel.MainEvent.EmptyResponseText ->
+                    tvNotFound?.text = event.emptyResponseText
+                is MainViewModel.MainEvent.ErrorResponse ->
+                    if (event.errorResponse) {
+                        llError?.visibility = View.VISIBLE
+                    } else {
+                        llError?.visibility = View.GONE
+                    }
+                is MainViewModel.MainEvent.RoundProgressShown ->
+                    if (event.roundProgressShown) {
+                        pbRoundProgress?.visibility = View.VISIBLE
+                    } else {
+                        pbRoundProgress?.visibility = View.GONE
+                    }
+                is MainViewModel.MainEvent.LinearProgressShown ->
+                    if (event.linearProgressShown) {
+                        pbLinearProgress?.visibility = View.VISIBLE
+                    } else {
+                        pbLinearProgress?.visibility = View.GONE
+                    }
+                //TODO
             }
-        })
-
-        viewModel.emptyResponseText.observe(this, { text ->
-            tvNotFound?.text = text
         })
     }
 
