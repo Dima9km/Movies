@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dima.movies.R
 import com.dima.movies.model.Movie
 import com.dima.movies.ui.listener.OnClickFavoriteListener
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainAdapter(val onClickFavoriteListener: OnClickFavoriteListener) :
     RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
@@ -34,7 +37,10 @@ class MainAdapter(val onClickFavoriteListener: OnClickFavoriteListener) :
 
     override fun getItemCount() = movies.size
 
-    class MainViewHolder(itemView: View, private val onClickFavoriteListener: OnClickFavoriteListener) :
+    class MainViewHolder(
+        itemView: View,
+        private val onClickFavoriteListener: OnClickFavoriteListener
+    ) :
         RecyclerView.ViewHolder(itemView) {
         private var title: TextView? = null
         private var image: ImageView? = null
@@ -51,32 +57,42 @@ class MainAdapter(val onClickFavoriteListener: OnClickFavoriteListener) :
         }
 
         fun bind(movie: Movie) {
-
             title?.text = movie.title
             desc?.text = movie.overview
             releaseDate?.text = movie.releaseDate
+
             Picasso.with(itemView.context)
                 .load("https://image.tmdb.org/t/p/w500${movie.posterPath}")
                 .error(R.drawable.ic_no_image)
                 .into(image)
 
-            if (movie.isFavorite) {
-                favorite!!.setImageResource(R.drawable.ic_heart_fill)
-            } else  {
-                favorite!!.setImageResource(R.drawable.ic_heart)
+            when {
+                movie.isFavorite -> {
+                    favorite!!.setImageResource(R.drawable.ic_heart_fill)
+                }
+                else -> {
+                    favorite!!.setImageResource(R.drawable.ic_heart)
+                }
+            }
+
+            itemView.setOnClickListener {
+                Snackbar.make(itemView, title?.text.toString(), Snackbar.LENGTH_LONG).show();
             }
 
             favorite?.setOnClickListener {
-                if (!movie.isFavorite) {
-                    movie.isFavorite = true
-                    favorite!!.setImageResource(R.drawable.ic_heart_fill)
-                    showToast("Добавлено в избранное")
-                    onClickFavoriteListener.onClickFavorite(movie)
-                } else {
-                    movie.isFavorite = false
-                    favorite!!.setImageResource(R.drawable.ic_heart)
-                    showToast("Удалено из избранного")
-                    onClickFavoriteListener.onClickFavorite(movie)
+                when {
+                    !movie.isFavorite -> {
+                        movie.isFavorite = true
+                        favorite!!.setImageResource(R.drawable.ic_heart_fill)
+                        showToast("Добавлено в избранное")
+                        onClickFavoriteListener.onClickFavorite(movie)
+                    }
+                    else -> {
+                        movie.isFavorite = false
+                        favorite!!.setImageResource(R.drawable.ic_heart)
+                        showToast("Удалено из избранного")
+                        onClickFavoriteListener.onClickFavorite(movie)
+                    }
                 }
             }
         }
