@@ -12,8 +12,6 @@ import com.dima.movies.model.Movie
 import com.dima.movies.ui.listener.OnClickFavoriteListener
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MainAdapter(val onClickFavoriteListener: OnClickFavoriteListener) :
     RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
@@ -76,7 +74,7 @@ class MainAdapter(val onClickFavoriteListener: OnClickFavoriteListener) :
             }
 
             itemView.setOnClickListener {
-                Snackbar.make(itemView, title?.text.toString(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(itemView, title?.text.toString(), Snackbar.LENGTH_LONG).show()
             }
 
             favorite?.setOnClickListener {

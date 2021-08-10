@@ -99,16 +99,17 @@ class MainActivity : FragmentActivity() {
 
                 is ProgressVisible ->
                     when {
-                        event.isShown && adapter.movies.isEmpty() -> {
+                        event.isShown.not() -> {
+                            pbRoundProgress?.visibility = View.GONE
+                            pbLinearProgress?.visibility = View.GONE
+                        }
+                        adapter.movies.isEmpty() -> {
                             pbRoundProgress?.visibility = View.VISIBLE
                             pbLinearProgress?.visibility = View.GONE
                         }
-                        event.isShown && adapter.movies.isNotEmpty() -> {
-                            pbLinearProgress?.visibility = View.VISIBLE
-                        }
-                        else -> {
+                        adapter.movies.isNotEmpty() -> {
                             pbRoundProgress?.visibility = View.GONE
-                            pbLinearProgress?.visibility = View.GONE
+                            pbLinearProgress?.visibility = View.VISIBLE
                         }
                     }
 
