@@ -17,28 +17,21 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
     val events: LiveData<MainEvent> get() = _events
 
     fun getAllMovies() {
-        _events.value = ProgressVisible(isShown = true, type = "Linear")
+        _events.value = ProgressVisible(isShown = true)
         val response = repository.getAllMovies()
         response.enqueue(object : Callback<AllMoviesResponse> {
             override fun onResponse(
                 call: Call<AllMoviesResponse>,
                 response: Response<AllMoviesResponse>
             ) {
-
                 when {
                     response.body() != null -> {
                         _events.value = NotEmpty(formatMovies(response.body()!!.results))
-                        _events.value = ProgressVisible(isShown = false, type = "Linear")
-                    }
-                }
-                when {
-                    response.body()?.results?.isEmpty() == true -> {
-                        _events.value = Empty(isShown = true, query = "")
-                        _events.value = ProgressVisible(isShown = false, type = "Round")
+                        _events.value = ProgressVisible(isShown = false)
                     }
                     else -> {
                         _events.value = ErrorResponse(isShown = false)
-                        _events.value = ProgressVisible(isShown = false, type = "Linear")
+                        _events.value = ProgressVisible(isShown = false)
                     }
                 }
             }
@@ -47,15 +40,14 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
                 _events.value = ErrorResponse(isShown = true)
                 _events.value = NetworkError(isShown = true)
                 _events.value = Empty(isShown = false, query = null)
-                _events.value = ProgressVisible(isShown = false, type = "Linear")
-                _events.value = ProgressVisible(isShown = false, type = "Round")
+                _events.value = ProgressVisible(isShown = false)
             }
         })
         _events.value = RefreshEnded(refreshEnded = true)
     }
 
     fun searchMovies(userQuery: String) {
-        _events.value = ProgressVisible(isShown = true, type = "Linear")
+        _events.value = ProgressVisible(isShown = true)
         val response = repository.searchMovies(userQuery)
         response.enqueue(object : Callback<AllMoviesResponse> {
             override fun onResponse(
@@ -63,21 +55,23 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
                 response: Response<AllMoviesResponse>
             ) {
                 when {
-                    response.body() != null -> {
+                    response.body()?.results?.isEmpty() == false -> {
                         _events.value = NotEmpty(formatMovies(response.body()!!.results))
-                        _events.value = ProgressVisible(isShown = false, type = "Linear")
+                        _events.value = Empty(isShown = false, query = "")
+                        _events.value = ProgressVisible(isShown = false)
                     }
-                }
-                when {
                     response.body()?.results?.isEmpty() == true -> {
+                        _events.value = NotEmpty(formatMovies(response.body()!!.results))
                         _events.value = Empty(
                             isShown = true,
                             query = "По вашему запросу «$userQuery»\nничего не найдено"
                         )
+                        _events.value = ProgressVisible(isShown = false)
+
                     }
                     else -> {
                         _events.value = Empty(isShown = false, query = "")
-                        _events.value = ProgressVisible(isShown = false, type = "Linear")
+                        _events.value = ProgressVisible(isShown = false)
                     }
                 }
             }
@@ -86,8 +80,7 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
                 _events.value = NetworkError(isShown = true)
                 _events.value = ErrorResponse(isShown = true)
                 _events.value = Empty(isShown = false, query = null)
-                _events.value = ProgressVisible(isShown = false, type = "Linear")
-                _events.value = ProgressVisible(isShown = false, type = "Round")
+                _events.value = ProgressVisible(isShown = false)
             }
         })
         _events.value = RefreshEnded(refreshEnded = true)
@@ -113,7 +106,7 @@ class MainViewModel(private val repository: MoviesRepository) : ViewModel() {
         data class NotEmpty(val movies: List<Movie>) : MainEvent()
         data class Empty(val isShown: Boolean, val query: String?) : MainEvent()
         data class ErrorResponse(val isShown: Boolean) : MainEvent()
-        data class ProgressVisible(val isShown: Boolean, val type: String) : MainEvent()
+        data class ProgressVisible(val isShown: Boolean) : MainEvent()
         data class RefreshEnded(val refreshEnded: Boolean) : MainEvent()
         data class NetworkError(val isShown: Boolean) : MainEvent()
     }

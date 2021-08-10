@@ -6,8 +6,8 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -23,7 +23,7 @@ import com.dima.movies.viewmodel.MainViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : FragmentActivity() {
 
     private var etSearch: EditText? = null
     private var llNotFound: LinearLayout? = null
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                         findViewById(android.R.id.content),
                         "Проверьте соединение с интернетом и попробуйте ещё раз",
                         Snackbar.LENGTH_LONG
-                    ).show();
+                    ).show()
 
                 is Empty ->
                     when {
@@ -99,10 +99,11 @@ class MainActivity : AppCompatActivity() {
 
                 is ProgressVisible ->
                     when {
-                        event.isShown && event.type == "Round" -> {
+                        event.isShown && adapter.movies.isEmpty() -> {
                             pbRoundProgress?.visibility = View.VISIBLE
+                            pbLinearProgress?.visibility = View.GONE
                         }
-                        event.isShown && event.type == "Linear" -> {
+                        event.isShown && adapter.movies.isNotEmpty() -> {
                             pbLinearProgress?.visibility = View.VISIBLE
                         }
                         else -> {
