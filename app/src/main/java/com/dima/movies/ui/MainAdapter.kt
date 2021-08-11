@@ -57,7 +57,7 @@ class MainAdapter(val onClickFavoriteListener: OnClickFavoriteListener) :
         fun bind(movie: Movie) {
             title?.text = movie.title
             desc?.text = movie.overview
-            releaseDate?.text = movie.releaseDate
+            releaseDate?.text = movie.formattedCreatedAt
 
             Picasso.with(itemView.context)
                 .load("https://image.tmdb.org/t/p/w500${movie.posterPath}")
